@@ -77,7 +77,7 @@
         
         //array of Street Fighter Names
         var fighters = ["Ryu", "Ken", "Gouki"];
-        var fighterName = $(this).attr("data-name");
+        var fighterName;
         
         //need to create buttons for new names 
 
@@ -95,9 +95,10 @@
         }
 
         $("#submitName").on("click", function(){
+            var fighterName = $("#fighter-name.form-control").val();
             fighters.push(fighterName);
-            createButtons();
             console.log(fighters);
+            createButtons();
         })
 
         createButtons();
@@ -145,7 +146,9 @@
         }
 
         //this is the on click event to pull the gif associated with the fighter's name
-        $(".fighter").on("click", function (event) {
+        //$(".fighter").on("click", function (event) { 
+            //changed to $(document) as that is what should be used against dynamically created elements
+          $(document).on("click", ".fighter", function (event) {
             event.preventDefault();
             x = $(this).attr("data-name");
             getX();
@@ -153,7 +156,7 @@
            
         })
 
-        /*need to create two on click events. 
+        /*need to create two on-click events. 
         One for the submit button and one for the new buttons to run the AJAX.
         */
     </script>
