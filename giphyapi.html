@@ -26,29 +26,34 @@
     </div>
 
 
+
     <div class="container">
+
+            <div class="buttonsgohere">BUTTONS WILL GO HERE!
+                    <!--I want to use these as buttons, but I think the 
+                        search info being defined from the beginning is a problem                        
+                    <button data-search="ryu">Ryu</button>
+                    <button data-search="ken">Ken</button>
+                    <button data-search="gouki">Gouki</button>!-->
+            </div>
+
+            <br> <br>
+            
         <label for="fighterName">Enter your favorite Street Fighter II character</label>
         <div class="row">
                 <div class="col-sm-6">
                   <div class="input-group">
                     <span class="input-group-btn">
-                      <button class="btn btn-default" type="button">SHORYUKEN!</button>
+                      <button class="btn btn-default" id="submitName" type="button">SHORYUKEN!</button>
                     </span>
-                    <input type="text" class="form-control" id="fighterName" placeholder="Search for...">
+                    <input type="text" class="form-control" id="fighter-name" placeholder="Search for...">
                   </div><!-- /input-group -->
                 </div><!-- /.col-lg-6 -->
     <br>
     <br>
-    <div class="buttonsgohere">BUTTONS WILL GO HERE!
-        <button data-search="ryu">Ryu</button>
-        <button data-search="ken">Ken</button>
-        <button data-search="gouki">Gouki</button>
+    
 
-
-    </div>
-
-    <br>
-    <br>
+   
 
     <div class="gifsgohere">GIFs will appear here!
 
@@ -69,8 +74,38 @@
 
 
     <script>
-        var x;
+        
+        //array of Street Fighter Names
         var fighters = ["Ryu", "Ken", "Gouki"];
+        var fighterName = $(this).attr("fighter-name");
+        
+        //need to create buttons for new names 
+
+        function createButtons(){
+            $(".buttonsgohere").empty();
+
+            for (var i = 0; i < fighters.length; i++){
+                var a = $("<button>");
+                a.addClass("fighter");
+                a.attr("fighter-name", fighters[i]);
+                a.text(fighters[i]);
+                $(".buttonsgohere").append(a);
+                console.log("you added " + fighterName);
+            }
+        }
+
+        $("#submitName").on("click", function(){
+            fighters.push(fighterName);
+            createButtons();
+        })
+
+        createButtons();
+        
+
+        //AJAX and Giphy URL STUFF///////////////////////////////////////////////////////
+
+        var x;
+        
         var fighter;
 
         function getX() {
@@ -108,68 +143,18 @@
                 })
         }
 
-
-        $("button").on("click", function (event) {
+        //this is the on click event to pull the gif associated with the fighter's name
+        $(".fighter").on("click", function (event) {
             event.preventDefault();
-            x = $(this).data("search");
+            x = $(this).attr("data-name");
             getX();
             console.log(x);
-            // This line will grab the text from the input box
-            var fighter = $("data-name").val().trim();
-            // The name from the textbox is then added to our array
-            fighters.push(fighter);
-            console.log(fighter);
-
-            // calling renderButtons which handles the processing of our movie array
-           // renderButtons();
+           
         })
 
-
-        //need to add new buttons when a name is submitted.  Refer to movie button layout solved.html. 06.AJAX.07Solved
-        // Function for displaying movie data
-        function renderButtons() {
-
-            // Deleting the movie buttons prior to adding new movie buttons
-            // (this is necessary otherwise we will have repeat buttons)
-            $(".buttonsgohere").empty();
-
-            // Looping through the array of movies
-            for (var i = 0; i < fighters.length; i++) {
-
-                // Then dynamicaly generating buttons for each movie in the array.
-                // This code $("<button>") is all jQuery needs to create the start and end tag. (<button></button>)
-                var a = $("<button>");
-                // Adding a class
-                a.addClass("fighter");
-                // Adding a data-attribute with a value of the movie at index i
-                a.attr("data-name", fighters[i]);
-                // Providing the button's text with a value of the movie at index i
-                a.text(fighters[i]);
-                // Adding the button to the HTML
-                $(".buttonsgohere").append(a);
-            }
-        }
-
-
-        renderButtons();
-        // This function handles events where one button is clicked
-        $(".fighter").on("click", function(event) {
-        //event.preventDefault() //prevents the form from trying to submit itself.
-        // We're using a form so that the user can hit enter instead of clicking the button if they want
-        event.preventDefault();
-
-        // This line will grab the text from the input box
-        var fighter = $("#fighterName").val().trim();
-        // The movie from the textbox is then added to our array
-        fighters.push(fighter);
-
-        // calling renderButtons which handles the processing of our movie array
-        renderButtons();
-        })
-
-
-        // Calling the renderButtons function at least once to display the initial list of movies
-        //renderButtons();
+        /*need to create two on click events. 
+        One for the submit button and one for the new buttons to run the AJAX.
+        */
     </script>
 
 
