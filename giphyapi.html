@@ -49,18 +49,18 @@
                     <input type="text" class="form-control" id="fighter-name" placeholder="Search for...">
                   </div><!-- /input-group -->
                 </div><!-- /.col-lg-6 -->
+        </div>
     <br>
     <br>
     
 
-   
-
-    <div class="gifsgohere">GIFs will appear here!
-
-
-
+   <div class="row">
+       <div class="col-md-4">
+            <div class="gifsgohere">
+            
+            </div>
+        </div>
     </div>
-
 
 
     <!-- jQuery library -->
@@ -76,7 +76,7 @@
     <script>
         
         //array of Street Fighter Names
-        var fighters = ["Ryu", "Ken", "Gouki"];
+        var fighters = ["Ryu", "Ken", "Gouki", "Guile", "E.Honda"];
         var fighterName;
         
         //need to create buttons for new names 
@@ -103,7 +103,7 @@
 
         createButtons();
         
-
+        
         //AJAX and Giphy URL STUFF///////////////////////////////////////////////////////
 
         var x;
@@ -111,7 +111,7 @@
         var fighter;
 
         function getX() {
-            var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + x +
+            var queryURL = "https://api.giphy.com/v1/gifs/search?q=street+fighter+" + x +
                 "&api_key=d3PnF7tQvIvNw9sUFnHYOpc7gGPUz5bv&limit=10";
 
             $.ajax({
@@ -134,12 +134,17 @@
                         var fighterImage = $("<img>");
                         // Setting the src attribute of the image to a property pulled off the result item
                         fighterImage.attr("src", results[i].images.fixed_height_still.url);
+                        fighterImage.attr("data-still", results[i].images.fixed_height_still.url);
+                        fighterImage.attr("data-animate", results[i].images.fixed_height.url);
+                        fighterImage.attr("data-state", "still");
+                        fighterImage.addClass("gif");
 
-                        // Appending the paragraph and image tag to the animalDiv
-                        fighterDiv.append(p);
+
+                        // Appending the paragraph and image tag to the fighterDiv
                         fighterDiv.append(fighterImage);
+                        fighterDiv.append(p);
 
-                        // Prependng the fighterDiv to the HTML page in the "#gifs-appear-here" div
+                        // Prependng the fighterDiv to the HTML page in the ".gifsgohere" div
                         $(".gifsgohere").prepend(fighterDiv);
                     }
                 })
@@ -152,9 +157,25 @@
             event.preventDefault();
             x = $(this).attr("data-name");
             getX();
-            console.log(x);
-           
+            console.log(x);           
         })
+        
+     
+        $(document).on("click", ".gif", function(){
+            console.log("clicked");
+            var state = $(this).attr("data-state");
+      // If the clicked image's state is still, update its src attribute to what its data-animate value is.
+      // Then, set the image's data-state to animate
+      // Else set src to the data-still value
+      if (state === "still") {
+        $(this).attr("src", $(this).attr("data-animate"));
+        $(this).attr("data-state", "animate");
+      } else {
+        $(this).attr("src", $(this).attr("data-still"));
+        $(this).attr("data-state", "still");
+      }
+    })
+
 
         /*need to create two on-click events. 
         One for the submit button and one for the new buttons to run the AJAX.
